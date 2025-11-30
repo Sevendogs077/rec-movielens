@@ -4,10 +4,12 @@ import torch.nn as nn
 class MatrixFactorization(nn.Module):
     def __init__(self, num_users, num_items, num_features):
         super().__init__()
-        # 在矩阵分解中，user 和 item 的特征向量长度必须相等才可以进行点积，因此 embedding_dim 为一个统一的值
+
+        # The user and item embeddings must have the same dimension for the dot product interaction
         self.user_embedding = nn.Embedding(num_embeddings=num_users, embedding_dim=num_features)
         self.item_embedding = nn.Embedding(num_embeddings=num_items, embedding_dim=num_features)
-        # 正态分布初始化
+
+        # Initialize weights
         nn.init.normal_(self.user_embedding.weight, mean=0, std=0.01)
         nn.init.normal_(self.item_embedding.weight, mean=0, std=0.01)
 

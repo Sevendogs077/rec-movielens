@@ -9,14 +9,14 @@ class MovieLensDataset(Dataset):
 
         abs_path = os.path.abspath(data_path)
         if not os.path.exists(abs_path):
-            raise FileNotFoundError(f"找不到数据文件！\n程序试图寻找: {abs_path}\n请检查你的'当前运行目录'是否在项目根目录下。")
+            raise FileNotFoundError(f"Data file not found.\nExpected path: {abs_path}\n")
 
-        print(f"成功加载数据: {abs_path}")
+        print(f"Successfully loaded dataset: {abs_path}")
 
         names = ['user_id', 'item_id', 'rating', 'timestamp']
         df = pd.read_csv(abs_path, sep='\t', header=None, names=names)
 
-        # 将 user_id, item_id 和 0 对齐
+        # Adjust IDs for PyTorch Embedding (0-based)
         df['user_id'] -= 1
         df['item_id'] -= 1
 

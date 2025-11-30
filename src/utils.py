@@ -2,19 +2,24 @@ import argparse
 import torch
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='MovieLens 推荐系统训练参数配置')
+    parser = argparse.ArgumentParser(description='MovieLens Recommender System')
 
-    # data
+    # ============ data ============
     parser.add_argument('--data_path', type=str, default='./data/u.data')
-    parser.add_argument('--num_features', type=int, default=32)
+    parser.add_argument('--num_features', type=int, default=64)
 
-    # train
+    # ============ train ============
     parser.add_argument('--batch_size', type=int, default=256)
+    parser.add_argument('--train_ratio', type=float, default=0.8)
     parser.add_argument('--lr', type=float, default=0.001)
-    parser.add_argument('--num_epochs', type=int, default=20)
+    parser.add_argument('--num_epochs', type=int, default=50)
     parser.add_argument('--loss_type', type=str, default='mse',choices=['mse', 'l1'])
+    parser.add_argument('--seed', type=int, default=77)
 
-    # device
+    # ============ save ============
+    parser.add_argument('--save_dir', type=str, default='./saved_models')
+
+    # ============ device ============
     parser.add_argument('--device', type=str, default='cuda')
 
     args = parser.parse_args()
