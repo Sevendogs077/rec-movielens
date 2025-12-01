@@ -1,6 +1,6 @@
 # rec-movielens
 
-![License](https://img.shields.io/badge/license-MIT-blue)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 ---
 
