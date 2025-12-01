@@ -6,7 +6,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torch.utils.data import random_split
 from src.dataset import MovieLensDataset
-from src.model import MatrixFactorization
+from src.model import MatrixFactorization, GeneralizedMF, NeuralCF
 from src.utils import parse_args
 
 def set_seed(seed):
@@ -38,7 +38,15 @@ def train(args):
     test_loader = DataLoader(test_set, batch_size=args.batch_size, shuffle=False)
 
     # Initialize model
-    model = MatrixFactorization(dataset.num_users, dataset.num_items, args.num_features)
+    if args.model_type == 'mf':
+        model = MatrixFactorization(dataset.num_users, dataset.num_items, args.num_features)
+    elif args.model_type == 'gmf':
+        model = GeneralizedMF(dataset.num_users, dataset.num_items, args.num_features)
+    elif args.model_type == 'ncf':
+        model = NeuralCF(dataset.num_users, dataset.num_items, args.num_features)
+    else:
+        raise ValueError(f"Unknown model type: {args.model_type}")
+
     model = model.to(args.device)
 
     # Define loss func & optimizer

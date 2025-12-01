@@ -3,14 +3,20 @@
 ---
 ### Introduction
 
-This is my simple practice of Recommender System based on [MovieLens 100K Dataset](https://grouplens.org/datasets/movielens/100k/)
+A simple implementation of Recommender System based on the [MovieLens 100K Dataset](https://grouplens.org/datasets/movielens/100k/).
 
 ---
 
 ### To-Do List
 
-- [x] GMF (Generalized Matrix Factorization) 
-- [ ] To be continued...
+- [x] **MF**
+- [x] **GMF**
+- [] **NCF**
+- [] **DeepFM**
+- [] **DIN**
+- [] **SASRec**
+- [] **LightGCN**
+- [] **LLM4Rec** - *Coming Soon*
 ---
 
 ### Requirements
@@ -38,7 +44,7 @@ python train.py --num_features 32 --num_epochs 50 --lr 0.005
 #### Experiment Management
 
 ```bash
-python train.py --seed 24  --train_ratio 0.9 --save_dir ./saved_models/exp_24_ratio_0.9
+python train.py --model_type 'ncf' --seed 24 --save_dir ./saved_models/exp_ncf_24
 ```
 
 ---
