@@ -22,11 +22,17 @@ def set_seed(seed):
     # torch.backends.cudnn.benchmark = False
 
 def train(args):
+    # Select device
+    if args.device == 'cuda' and torch.cuda.is_available():
+        args.device = torch.device('cuda')
+    else:
+        args.device = torch.device('cpu')
+
+    print(f"Using Device: {args.device}")
+
     # Setup save_dir
     if not os.path.exists(args.save_dir):
         os.makedirs(args.save_dir)
-
-    print(f"Using Device: {args.device}")
 
     # Load dataset
     dataset = MovieLensDataset(args.data_path)
@@ -42,7 +48,7 @@ def train(args):
     train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
     test_loader = DataLoader(test_set, batch_size=args.batch_size, shuffle=False)
 
-    # Initialize model
+    # Select model
     model_mapping = {
         'mf': model.MatrixFactorization,
         'gmf': model.GeneralizedMF,
@@ -50,11 +56,10 @@ def train(args):
     }
     if args.model_type not in model_mapping:
         raise ValueError(f"Model '{args.model_type}' not found. Choices: {list(model_mapping.keys())}")
-
     model_class = model_mapping[args.model_type]
 
+    # Initialize net
     net = model_class(dataset.num_users, dataset.num_items, args.num_features)
-
     net = net.to(args.device)
 
     # Define loss func & optimizer

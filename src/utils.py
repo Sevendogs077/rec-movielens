@@ -23,11 +23,13 @@ def parse_args():
     parser.add_argument('--save_dir', type=str, default='./log')
 
     # ============ device ============
-    parser.add_argument('--device', type=str, default='cuda')
+    parser.add_argument('--device', type=str, default='cuda',choices=['cuda', 'cpu'])
 
+    # ============ parse =============
     args = parser.parse_args()
 
-    args.device = torch.device('cuda') if args.device == 'cuda' and torch.cuda.is_available() else torch.device('cpu')
+    # String -> torch.device
+    #args.device = torch.device('cuda') if args.device == 'cuda' and torch.cuda.is_available() else torch.device('cpu')
 
     return args
 
