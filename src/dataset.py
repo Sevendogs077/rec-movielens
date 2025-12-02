@@ -1,7 +1,10 @@
 import os
 import pandas as pd
+import logging
 import torch
 from torch.utils.data import Dataset
+
+logger = logging.getLogger(__name__)
 
 class MovieLensDataset(Dataset):
     def __init__(self, data_path):
@@ -11,7 +14,7 @@ class MovieLensDataset(Dataset):
         if not os.path.exists(abs_path):
             raise FileNotFoundError(f"Data file not found.\nExpected path: {abs_path}\n")
 
-        print(f"Successfully loaded dataset: {abs_path}")
+        logger.info(f"Successfully loaded dataset: {abs_path}")
 
         names = ['user_id', 'item_id', 'rating', 'timestamp']
         df = pd.read_csv(abs_path, sep='::', header=None, engine='python', names=names)

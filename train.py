@@ -11,7 +11,7 @@ from torch.utils.data import random_split
 
 from src.dataset import MovieLensDataset
 from src import model
-from src.utils import parse_args, save_args
+from src.utils import parse_args, save_args, get_logger
 
 def set_seed(seed):
     random.seed(seed)
@@ -23,20 +23,23 @@ def set_seed(seed):
     # torch.backends.cudnn.benchmark = False
 
 def train(args):
+    # Setup save_dir
+    if not os.path.exists(args.save_dir):
+        os.makedirs(args.save_dir)
+
+    # Initialize logger
+    logger = get_logger(args.save_dir)
+
     # Select device
     if args.device == 'cuda' and torch.cuda.is_available():
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
 
-    print(f"Using Device: {device}")
-
-    # Setup save_dir
-    if not os.path.exists(args.save_dir):
-        os.makedirs(args.save_dir)
+    logger.info(f"Using Device: {device}")
 
     # Save args
-    save_args(args, args.save_dir)
+    save_args(args, args.save_dir, logger)
 
     # Load dataset
     dataset = MovieLensDataset(args.data_path)
@@ -146,24 +149,24 @@ def train(args):
         test_loss_history.append(avg_test_loss)
 
         # ============ Log & Save ============
-        print(f"Epoch {epoch + 1}/{args.num_epochs} | "
-                f"Train Loss: {avg_train_loss:.4f} | "
-                f"Test Loss: {avg_test_loss:.4f}")
-
-        print("-" * 60)
-
         # Save best model
-        if avg_test_loss < best_loss:
+        is_best = avg_test_loss < best_loss
+        if is_best:
             best_loss = avg_test_loss
             torch.save(net.state_dict(), os.path.join(args.save_dir, 'best_model.pth'))
 
+        mark = " *" if is_best else ""
+        logger.info(f"Epoch {epoch + 1}/{args.num_epochs} | "
+                    f"Train Loss: {avg_train_loss:.4f} | "
+                    f"Test Loss: {avg_test_loss:.4f}{mark}")
+
     # Save final model
     torch.save(net.state_dict(), os.path.join(args.save_dir, 'last_model.pth'))
-    print(f"Training Done! Best Test Loss: {best_loss:.4f}")
+    logger.info(f"Training Done! Best Test Loss: {best_loss:.4f}")
     print("=" * 60)
 
-    # Save loss curve
-    plt.figure(figsize=(8, 6))
+    # Draw & Save loss curve
+    plt.figure(figsize=(10, 6))
     plt.plot(train_loss_history, label='Training Loss', color='blue')
     plt.plot(test_loss_history, label='Validation Loss', color='orange')
 
@@ -175,7 +178,7 @@ def train(args):
 
     plot_path = os.path.join(args.save_dir, 'loss_curve.png')
     plt.savefig(plot_path)
-    print(f"Loss curve saved to: {os.path.abspath(plot_path)}")
+    logger.info(f"Loss curve saved to: {os.path.abspath(plot_path)}")
 
 def main():
     args = parse_args()

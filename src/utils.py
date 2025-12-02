@@ -1,5 +1,7 @@
 import os
+import sys
 import json
+import logging
 import argparse
 
 def parse_args():
@@ -32,11 +34,11 @@ def parse_args():
 
     return args
 
-def save_args(args, save_dir):
+def save_args(args, save_dir, logger):
     param_path = os.path.join(save_dir, 'config.json')
     with open(param_path, 'w') as f:
         json.dump(vars(args), f, indent=4)
-    print(f"Config saved to {os.path.abspath(param_path)}")
+    logger.info(f"Config saved to {os.path.abspath(param_path)}")
 
 def load_args(save_dir):
     param_path = os.path.join(save_dir, 'config.json')
@@ -44,3 +46,26 @@ def load_args(save_dir):
         args_dict = json.load(f)
     return argparse.Namespace(**args_dict)
 
+def get_logger(save_dir):
+    log_file = os.path.join(save_dir, 'train.log')
+
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+    # File: detailed info
+    file_fmt = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    # Console: message only
+    console_fmt = logging.Formatter('%(message)s')
+
+    if not logger.handlers:
+        # Handler 1
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setFormatter(console_fmt)
+        logger.addHandler(console_handler)
+
+        # Handler 2
+        file_handler = logging.FileHandler(log_file, mode='w')
+        file_handler.setFormatter(file_fmt)
+        logger.addHandler(file_handler)
+
+    return logger
