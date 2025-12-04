@@ -8,6 +8,7 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torch.utils.data import random_split
+import torch.optim.lr_scheduler as lr_scheduler
 
 from src.dataset import MovieLensDataset
 from src import model
@@ -80,6 +81,15 @@ def train(args):
     optimizer = torch.optim.Adam(net.parameters(),
                                  lr=args.lr,
                                  weight_decay=args.weight_decay)
+    # Select lr scheduler
+    if args.scheduler == 'step':
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=args.lr_step, gamma=args.lr_gamma)
+    elif args.scheduler == 'cosine':
+        scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.num_epochs, eta_min=args.lr_min)
+    elif args.scheduler == 'plateau':
+        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=args.lr_gamma, patience=args.lr_patience)
+    else:
+        scheduler = None
 
     # Initialize best_loss
     best_loss = float('inf')
@@ -147,6 +157,20 @@ def train(args):
 
         avg_test_loss = total_test_loss / len(test_loader)
         test_loss_history.append(avg_test_loss)
+
+        # ============ Lr scheduler step ============
+        if scheduler is not None:
+            last_lr = optimizer.param_groups[0]['lr']
+
+            if args.scheduler == 'plateau':
+                scheduler.step(avg_test_loss)
+            else:
+                scheduler.step()
+
+            current_lr = optimizer.param_groups[0]['lr']
+
+            if current_lr != last_lr:
+                logger.info(f"Learning Rate changed: {last_lr} -> {current_lr}")
 
         # ============ Log & Save ============
         # Save best model

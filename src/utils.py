@@ -12,16 +12,33 @@ def parse_args():
     parser.add_argument('--num_features', type=int, default=64)
 
     # ============ model ============
-    parser.add_argument('--model_type', type=str, default='gmf', choices=['mf', 'gmf', 'ncf'])
+    parser.add_argument('--model_type', type=str, default='ncf', choices=['mf', 'gmf', 'ncf'])
 
     # ============ train ============
-    parser.add_argument('--num_epochs', type=int, default=2)
+    parser.add_argument('--num_epochs', type=int, default=25)
     parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--train_ratio', type=float, default=0.8)
     parser.add_argument('--lr', type=float, default=0.001)
     parser.add_argument('--weight_decay', type=float, default=1e-4)
     parser.add_argument('--loss_type', type=str, default='mse',choices=['mse', 'l1'])
     parser.add_argument('--seed', type=int, default=77)
+
+    # ============ scheduler ============
+    parser.add_argument('--scheduler', type=str, default='plateau',
+                        choices=['none', 'step', 'cosine', 'plateau'],
+                        help='LR scheduler type')
+
+    parser.add_argument('--lr_step', type=int, default=5,
+                        help='StepLR decay step')
+
+    parser.add_argument('--lr_gamma', type=float, default=0.5,
+                        help='LR decay factor')
+
+    parser.add_argument('--lr_min', type=float, default=1e-6,
+                        help='Minimum learning rate')
+
+    parser.add_argument('--lr_patience', type=int, default=5,
+                        help='Patience for Plateau')
 
     # ============ save ============
     parser.add_argument('--save_dir', type=str, default='./output')

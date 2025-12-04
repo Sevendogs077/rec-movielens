@@ -21,3 +21,4 @@ output/
 .DS_Store
 Thumbs.db
 
+/run_experiments.bat
