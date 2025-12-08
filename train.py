@@ -11,7 +11,7 @@ from torch.utils.data import random_split
 import torch.optim.lr_scheduler as lr_scheduler
 
 from src.dataset import MovieLensDataset
-from src import model
+from src.models import all_models
 from src.utils import parse_args, save_args, get_logger
 
 def set_seed(seed):
@@ -56,18 +56,23 @@ def train(args):
     train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
     test_loader = DataLoader(test_set, batch_size=args.batch_size, shuffle=False)
 
-    # Select model
-    model_mapping = {
-        'mf': model.MatrixFactorization,
-        'gmf': model.GeneralizedMF,
-        'ncf': model.NeuralCF,
+    # Select model type
+    if args.model_type not in all_models:
+        raise ValueError(f"Model {args.model_type} not found.")
+
+    model_class = all_models[args.model_type]
+
+    # Initialize model param
+    model_params = {
+        'num_users': dataset.num_users,
+        'num_items': dataset.num_items,
+        'num_features': args.num_features,
+        'mlp_layers': args.mlp_layers,
+        'dropout': args.dropout
     }
-    if args.model_type not in model_mapping:
-        raise ValueError(f"Model '{args.model_type}' not found. Choices: {list(model_mapping.keys())}")
-    model_class = model_mapping[args.model_type]
 
     # Initialize model architecture
-    net = model_class(dataset.num_users, dataset.num_items, args.num_features)
+    net = model_class(**model_params)
     net = net.to(device)
 
     # Define loss function

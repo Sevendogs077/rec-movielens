@@ -14,6 +14,9 @@ def parse_args():
     # ============ model ============
     parser.add_argument('--model_type', type=str, default='ncf', choices=['mf', 'gmf', 'ncf'])
 
+    parser.add_argument('--mlp_layers', type=int, nargs='+', default=[64, 32, 16])
+    parser.add_argument('--dropout', type=float, default=0.2)
+
     # ============ train ============
     parser.add_argument('--num_epochs', type=int, default=25)
     parser.add_argument('--batch_size', type=int, default=256)
