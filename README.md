@@ -10,6 +10,22 @@ A simple implementation of Recommender System based on the [MovieLens 1M Dataset
 
 ---
 
+### Quick Start
+
+#### Training
+
+```bash
+python train.py
+```
+
+#### Evaluation
+
+```bash
+python evaluate.py
+```
+
+---
+
 ### Roadmap
 
 **Step 0: ID-based Matching** _(Collaborative Filtering)_
@@ -30,7 +46,7 @@ A simple implementation of Recommender System based on the [MovieLens 1M Dataset
 
 **Step 4: Multi-Task Learning** _(CTR & CVR Joint Training)_
 
-> ![MMoE](https://img.shields.io/badge/MMoE-Planned-lightgrey) ![ESMM](https://img.shields.io/badge/ESMM-Optional-lightgrey)
+> ![MMoE](https://img.shields.io/badge/MMoE-Optional-lightgrey) ![ESMM](https://img.shields.io/badge/ESMM-Optional-lightgrey)
 
 ---
 
@@ -42,18 +58,4 @@ A simple implementation of Recommender System based on the [MovieLens 1M Dataset
 
 ---
 
-### Quick Start
 
-#### Training
-
-```bash
-python train.py
-```
-
-#### Evaluation
-
-```bash
-python evaluate.py
-```
-
----
