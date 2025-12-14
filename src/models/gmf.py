@@ -3,6 +3,7 @@ import torch.nn as nn
 class GeneralizedMF(nn.Module):
     def __init__(self, num_users, num_items, num_features, **kwargs):
         super().__init__()
+
         self.user_embedding = nn.Embedding(num_embeddings=num_users, embedding_dim=num_features)
         self.item_embedding = nn.Embedding(num_embeddings=num_items, embedding_dim=num_features)
 
@@ -17,7 +18,10 @@ class GeneralizedMF(nn.Module):
         # simulate MF at the beginning
         nn.init.constant_(self.predict_layer.weight, 1.0)
 
-    def forward(self, user_ids, item_ids):
+    def forward(self, inputs):
+        user_ids = inputs['user_id']
+        item_ids = inputs['item_id']
+
         u_emb = self.user_embedding(user_ids)
         i_emb = self.item_embedding(item_ids)
 

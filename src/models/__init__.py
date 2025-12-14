@@ -1,12 +1,12 @@
 from .mf import MatrixFactorization
 from .gmf import GeneralizedMF
-from .ncf import NeuralCF
+from .neumf import NeuMF
 # from .fm import FactorizationMachine
 # from .deepfm import DeepFM
 
 all_models = {
     'mf': MatrixFactorization,
     'gmf': GeneralizedMF,
-    'ncf': NeuralCF,
+    'neumf': NeuMF,
     # 'fm': FactorizationMachine
 }

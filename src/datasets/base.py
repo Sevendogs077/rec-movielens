@@ -1,7 +1,8 @@
 import os
 import re
-import pandas as pd
 import logging
+import json
+import pandas as pd
 from torch.utils.data import Dataset
 from sklearn.preprocessing import LabelEncoder
 
@@ -116,8 +117,13 @@ class BaseDataset(Dataset):
 
         self.df = df
 
-        dims_str = ", ".join([f"{k}:{v}" for k, v in self.feature_dims.items()])
-        logger.info(f"BaseDataset Loaded: N={len(self.df)} | Users={self.num_users} | Items={self.num_items} | Dims={{{dims_str}}}")
+        # ========== Log ==========
+        logger.info(" Dataset Info ".center(60,"="))
+        logger.info(f"Total Samples : {len(self.df)}")
+        logger.info(f"Num Users     : {self.num_users}")
+        logger.info(f"Num Items     : {self.num_items}")
+        logger.info(f"Num Features  : {len(self.feature_dims)}")
+        #logger.info(f"Feature Names : {list(self.feature_dims.keys())}")
 
     def __len__(self):
         return len(self.df)

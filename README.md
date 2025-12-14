@@ -32,7 +32,7 @@ python evaluate.py
 
 > ![MF](https://img.shields.io/badge/MF-Done-success) 
 > ![GMF](https://img.shields.io/badge/GMF-Done-success) 
-> ![NCF](https://img.shields.io/badge/NCF-Done-success)
+> ![NeuMF](https://img.shields.io/badge/NeuMF-Done-success)
 
 **Step 1: Feature Interaction** _(Ranking Classics)_
 

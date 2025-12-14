@@ -105,7 +105,7 @@ def train(args):
     test_loss_history = []
 
     # Start training
-    print(" Start Training ".center(60, "="))
+    logger.info(" Start Training ".center(60, "="))
     for epoch in range(args.num_epochs):
 
         # ============ Train ============
@@ -192,7 +192,6 @@ def train(args):
     # Save final model
     torch.save(net.state_dict(), os.path.join(args.save_dir, 'last_model.pth'))
     logger.info(f"Training Done! Best Test Loss: {best_loss:.4f}")
-    print("=" * 60)
 
     # Draw & Save loss curve
     plt.figure(figsize=(10, 6))

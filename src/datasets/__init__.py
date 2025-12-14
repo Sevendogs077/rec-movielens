@@ -6,7 +6,7 @@ dataset_mapping = {
     # Interaction
     'mf': InteractionDataset,
     'gmf': InteractionDataset,
-    'ncf': InteractionDataset,
+    'neumf': InteractionDataset,
 
     # Feature
     'fm': FeatureDataset,
