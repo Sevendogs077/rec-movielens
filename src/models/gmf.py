@@ -1,29 +1,47 @@
+import torch
 import torch.nn as nn
+from .base import BaseModel
 
-class GeneralizedMF(nn.Module):
-    def __init__(self, num_users, num_items, embedding_dim, **kwargs):
-        super().__init__()
+class GeneralizedMF(BaseModel):
 
-        self.user_embedding = nn.Embedding(num_embeddings=num_users, embedding_dim=embedding_dim)
-        self.item_embedding = nn.Embedding(num_embeddings=num_items, embedding_dim=embedding_dim)
+    REQUIRED_FEATURES = ['user_id', 'item_id']
 
+    def __init__(self, feature_dims, embedding_dim, **kwargs):
+        super().__init__(feature_dims)
+
+        # Feature names
+        self.feature_names = self.REQUIRED_FEATURES
+
+        # Embedding
+        self.num_embeddings = int(sum(feature_dims.values()))
+        self.embedding_dim = int(embedding_dim)
+        self.embedding = nn.Embedding(self.num_embeddings, self.embedding_dim)
+
+        # Offsets
+        feature_sizes = [feature_dims[name] for name in self.feature_names]
+        offsets = torch.tensor((0, *feature_sizes[:-1]), dtype=torch.long)
+        self.register_buffer('offsets', torch.cumsum(offsets, dim=0))
+
+        # Predict layer
         self.predict_layer = nn.Linear(embedding_dim, 1, bias=False)
 
         self._init_weights()
 
     def _init_weights(self):
-        nn.init.normal_(self.user_embedding.weight, mean=0, std=0.01)
-        nn.init.normal_(self.item_embedding.weight, mean=0, std=0.01)
-
-        # simulate MF at the beginning
-        nn.init.constant_(self.predict_layer.weight, 1.0)
+        nn.init.normal_(self.embedding.weight, mean=0, std=0.01)
+        nn.init.constant_(self.predict_layer.weight, 1.0) # simulate MF at the beginning
 
     def forward(self, inputs):
-        user_ids = inputs['user_id']
-        item_ids = inputs['item_id']
+        # Stack inputs
+        x = [inputs[name] for name in self.feature_names]
+        x = torch.stack(x, dim=1)
 
-        user_emb = self.user_embedding(user_ids)
-        item_emb = self.item_embedding(item_ids)
+        x = x + self.offsets
+
+        emb = self.embedding(x)
+
+        user_emb = emb[:, 0, :]
+        item_emb = emb[:, 1, :]
 
         # Element-wise product
         element_product = user_emb * item_emb
