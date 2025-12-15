@@ -8,9 +8,9 @@ class FeatureDataset(BaseDataset):
         # ========== Collect labels (rating) ==========
         self.labels = torch.tensor(self.df['rating'].values, dtype=torch.float32)
 
-        # ========== Collect fields ==========
+        # ========== Collect features ==========
         self.fields = {}
-        for col_name in self.field_names:
+        for col_name in self.feature_names:
             if col_name in self.df:
                 self.fields[col_name] = torch.tensor(self.df[col_name].values, dtype=torch.long)
 

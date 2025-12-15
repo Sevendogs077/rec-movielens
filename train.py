@@ -62,13 +62,28 @@ def train(args):
 
     model_class = all_models[args.model_type]
 
-    # Initialize model param
+    # Select model params
+    if hasattr(model_class, 'REQUIRED_FEATURES'):
+        target_features = model_class.REQUIRED_FEATURES
+    else:
+        target_features = list(dataset.feature_dims.keys())
+        # or: target_features = ['user_id', 'item_id', 'age', 'gender']
+
+    selected_feature_dims = {
+        k: v for k, v in dataset.feature_dims.items() if k in target_features
+    }
+
     model_params = {
-        'field_dims': getattr(dataset, 'field_dims', None),
+        'feature_dims': selected_feature_dims,
         'embedding_dim': args.embedding_dim,
         'mlp_layers': args.mlp_layers,
         'dropout': args.dropout
     }
+
+    logger.info(" Model Input Config ".center(60, "="))
+    logger.info(f"Model Type: {args.model_type}")
+    logger.info(f"Input Features: {len(selected_feature_dims)} / {len(dataset.feature_dims)}")
+    logger.info(f"Feature Names: {list(selected_feature_dims.keys())}")
 
     # Initialize model architecture
     net = model_class(**model_params) # '**': split dic into multiple params
