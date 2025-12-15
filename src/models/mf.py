@@ -19,10 +19,10 @@ class MatrixFactorization(nn.Module):
         user_ids = inputs['user_id']
         item_ids = inputs['item_id']
 
-        u_emb = self.user_embedding(user_ids)  # shape: [batch_size, embed_dim]
-        i_emb = self.item_embedding(item_ids)  # shape: [batch_size, embed_dim]
+        user_emb = self.user_embedding(user_ids)  # shape: [batch_size, embed_dim]
+        item_emb = self.item_embedding(item_ids)  # shape: [batch_size, embed_dim]
 
         # Dot Product
-        element_product = u_emb * i_emb
+        element_product = user_emb * item_emb
         output = torch.sum(element_product, dim=1)  # shape: [batch_size]
         return output

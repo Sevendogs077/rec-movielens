@@ -73,7 +73,7 @@ def train(args):
     }
 
     # Initialize model architecture
-    net = model_class(**model_params)
+    net = model_class(**model_params) # '**': split dic into multiple params
     net = net.to(device)
 
     # Define loss function

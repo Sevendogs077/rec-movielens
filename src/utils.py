@@ -19,7 +19,7 @@ def parse_args():
                         help='max length of user history sequence')
 
     # ============ Model ============
-    parser.add_argument('--model_type', type=str, default='neumf',
+    parser.add_argument('--model_type', type=str, default='mf',
                         choices=['mf', 'gmf', 'neumf', 'fm', 'deepfm'],
                         help='type of model')
 
@@ -31,7 +31,7 @@ def parse_args():
     parser.add_argument('--dropout', type=float, default=0.2)
 
     # ============ Train ============
-    parser.add_argument('--num_epochs', type=int, default=2)
+    parser.add_argument('--num_epochs', type=int, default=25)
     parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--loss_type', type=str, default='mse', choices=['mse', 'l1'])
 

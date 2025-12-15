@@ -41,16 +41,16 @@ class NeuMF(nn.Module):
         user_ids = inputs['user_id']
         item_ids = inputs['item_id']
 
-        u_emb_mlp = self.user_embedding_mlp(user_ids)
-        i_emb_mlp = self.item_embedding_mlp(item_ids)
-        u_emb_gmf = self.user_embedding_gmf(user_ids)
-        i_emb_gmf = self.item_embedding_gmf(item_ids)
+        user_emb_mlp = self.user_embedding_mlp(user_ids)
+        item_emb_mlp = self.item_embedding_mlp(item_ids)
+        user_emb_gmf = self.user_embedding_gmf(user_ids)
+        item_emb_gmf = self.item_embedding_gmf(item_ids)
 
         # Left: GMF
-        gmf_output = u_emb_gmf * i_emb_gmf
+        gmf_output = user_emb_gmf * item_emb_gmf
 
         # Right: MLP
-        mlp_input = torch.cat([u_emb_mlp, i_emb_mlp], dim=1)
+        mlp_input = torch.cat([user_emb_mlp, item_emb_mlp], dim=1)
         mlp_output = self.mlp(mlp_input)
 
         # Concatenation

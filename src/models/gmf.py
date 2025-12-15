@@ -22,11 +22,11 @@ class GeneralizedMF(nn.Module):
         user_ids = inputs['user_id']
         item_ids = inputs['item_id']
 
-        u_emb = self.user_embedding(user_ids)
-        i_emb = self.item_embedding(item_ids)
+        user_emb = self.user_embedding(user_ids)
+        item_emb = self.item_embedding(item_ids)
 
         # Element-wise product
-        element_product = u_emb * i_emb
+        element_product = user_emb * item_emb
 
         # Apply learnable weights to each feature dimension
         logits = self.predict_layer(element_product)
