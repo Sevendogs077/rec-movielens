@@ -19,7 +19,7 @@ def parse_args():
                         help='max length of user history sequence')
 
     # ============ Model ============
-    parser.add_argument('--model_type', type=str, default='gmf',
+    parser.add_argument('--model_type', type=str, default='neumf',
                         choices=['mf', 'gmf', 'neumf', 'fm', 'deepfm'],
                         help='type of model')
 

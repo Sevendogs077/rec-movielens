@@ -11,11 +11,13 @@ class GeneralizedMF(BaseModel):
 
         # Feature names
         self.feature_names = self.REQUIRED_FEATURES
+        self.user_idx = self.feature_names.index('user_id')
+        self.item_idx = self.feature_names.index('item_id')
 
         # Embedding
         self.num_embeddings = int(sum(feature_dims.values()))
         self.embedding_dim = int(embedding_dim)
-        self.embedding = nn.Embedding(self.num_embeddings, self.embedding_dim)
+        self.embedding = nn.Embedding(num_embeddings=self.num_embeddings, embedding_dim=self.embedding_dim)
 
         # Offsets
         feature_sizes = [feature_dims[name] for name in self.feature_names]
@@ -40,8 +42,8 @@ class GeneralizedMF(BaseModel):
 
         emb = self.embedding(feature_ids)
 
-        user_emb = emb[:, 0, :]
-        item_emb = emb[:, 1, :]
+        user_emb = emb[:, self.user_idx, :]
+        item_emb = emb[:, self.item_idx, :]
 
         # Element-wise product
         element_product = user_emb * item_emb
