@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 
 class MatrixFactorization(nn.Module):
-    def __init__(self, num_users, num_items, num_features, **kwargs):
+    def __init__(self, num_users, num_items, embedding_dim, **kwargs):
         super().__init__()
 
         # The user and item embeddings must have the same dimension for the dot product interaction
-        self.user_embedding = nn.Embedding(num_embeddings=num_users, embedding_dim=num_features)
-        self.item_embedding = nn.Embedding(num_embeddings=num_items, embedding_dim=num_features)
+        self.user_embedding = nn.Embedding(num_embeddings=num_users, embedding_dim=embedding_dim)
+        self.item_embedding = nn.Embedding(num_embeddings=num_items, embedding_dim=embedding_dim)
 
         self._init_weights()
 

@@ -64,10 +64,8 @@ def train(args):
 
     # Initialize model param
     model_params = {
-        'num_users': dataset.num_users,
-        'num_items': dataset.num_items,
-        'num_features': args.num_features,
-        'feature_dims': getattr(dataset, 'feature_dims', None),
+        'field_dims': getattr(dataset, 'field_dims', None),
+        'embedding_dim': args.embedding_dim,
         'mlp_layers': args.mlp_layers,
         'dropout': args.dropout
     }

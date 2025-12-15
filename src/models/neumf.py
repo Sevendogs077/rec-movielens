@@ -3,18 +3,18 @@ import torch.nn as nn
 from .layers import MLP
 
 class NeuMF(nn.Module):
-    def __init__(self, num_users, num_items, num_features, mlp_layers=None, dropout=0.2, **kwargs):
+    def __init__(self, num_users, num_items, embedding_dim, mlp_layers=None, dropout=0.2, **kwargs):
         super().__init__()
-        self.user_embedding_mlp = nn.Embedding(num_embeddings=num_users, embedding_dim=num_features)
-        self.item_embedding_mlp = nn.Embedding(num_embeddings=num_items, embedding_dim=num_features)
-        self.user_embedding_gmf = nn.Embedding(num_embeddings=num_users, embedding_dim=num_features)
-        self.item_embedding_gmf = nn.Embedding(num_embeddings=num_items, embedding_dim=num_features)
+        self.user_embedding_mlp = nn.Embedding(num_embeddings=num_users, embedding_dim=embedding_dim)
+        self.item_embedding_mlp = nn.Embedding(num_embeddings=num_items, embedding_dim=embedding_dim)
+        self.user_embedding_gmf = nn.Embedding(num_embeddings=num_users, embedding_dim=embedding_dim)
+        self.item_embedding_gmf = nn.Embedding(num_embeddings=num_items, embedding_dim=embedding_dim)
 
-        predict_input_dim = num_features + mlp_layers[-1]
+        predict_input_dim = embedding_dim + mlp_layers[-1]
         self.predict_layer = nn.Linear(predict_input_dim, 1, bias=False)
 
         self.mlp = MLP(
-            input_dim=num_features * 2,
+            input_dim=embedding_dim * 2,
             hidden_dims=mlp_layers,
             dropout=dropout,
             output_layer=False,

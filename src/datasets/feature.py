@@ -8,11 +8,11 @@ class FeatureDataset(BaseDataset):
         # ========== Collect labels (rating) ==========
         self.labels = torch.tensor(self.df['rating'].values, dtype=torch.float32)
 
-        # ========== Collect features ==========
-        self.features = {}
-        for col_name in self.feature_dims.keys():
+        # ========== Collect fields ==========
+        self.fields = {}
+        for col_name in self.field_names:
             if col_name in self.df:
-                self.features[col_name] = torch.tensor(self.df[col_name].values, dtype=torch.long)
+                self.fields[col_name] = torch.tensor(self.df[col_name].values, dtype=torch.long)
 
         # ========== Preparation for slice ==========
         self.max_history_len = max_history_len
@@ -20,8 +20,8 @@ class FeatureDataset(BaseDataset):
         self.user_ids_list = self.df['user_id'].values
 
     def __getitem__(self, idx):
-        # ========== Get features ==========
-        x = {key: tensor[idx] for key, tensor in self.features.items()}
+        # ========== Get fields ==========
+        x = {key: tensor[idx] for key, tensor in self.fields.items()}
 
         # ========== Get histories ==========
         # Get user_id

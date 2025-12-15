@@ -92,7 +92,7 @@ class BaseDataset(Dataset):
 
         # ========== Feature encoding ==========
 
-        self.feature_dims = {}
+        self.field_dims = {}
         sparse_features = [
             'gender', 'age', 'occupation', 'zipcode', 'genres',
             'release_year',
@@ -103,12 +103,12 @@ class BaseDataset(Dataset):
         for feat in sparse_features:
             lbe = LabelEncoder()
             df[feat] = lbe.fit_transform(df[feat])
-            self.feature_dims[feat] = df[feat].nunique()
+            self.field_dims[feat] = df[feat].nunique()
 
-        # Manually add other features
-        self.feature_dims['user_id'] = self.num_users
-        self.feature_dims['item_id'] = self.num_items + 1  # Indices: [0, N-1] for items, [N] for cold-start
-        self.feature_dims['last_item_id'] = self.num_items + 1 # Indices: [0, N-1] for items, [N] for cold-start
+        # Manually add other fields
+        self.field_dims['user_id'] = self.num_users
+        self.field_dims['item_id'] = self.num_items + 1  # Indices: [0, N-1] for items, [N] for cold-start
+        self.field_dims['last_item_id'] = self.num_items + 1 # Indices: [0, N-1] for items, [N] for cold-start
 
         # ========== Finalization ==========
 
@@ -117,13 +117,13 @@ class BaseDataset(Dataset):
 
         self.df = df
 
+        self.field_names = list(self.field_dims.keys())
+
         # ========== Log ==========
         logger.info(" Dataset Info ".center(60,"="))
         logger.info(f"Total Samples : {len(self.df)}")
-        logger.info(f"Num Users     : {self.num_users}")
-        logger.info(f"Num Items     : {self.num_items}")
-        logger.info(f"Num Features  : {len(self.feature_dims)}")
-        #logger.info(f"Feature Names : {list(self.feature_dims.keys())}")
+        logger.info(f"Num Fields : {len(self.field_dims)}")
+        #logger.info(f"Field Names : {field_names}")
 
     def __len__(self):
         return len(self.df)

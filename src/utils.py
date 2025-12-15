@@ -23,7 +23,7 @@ def parse_args():
                         choices=['mf', 'gmf', 'neumf', 'fm', 'deepfm'],
                         help='type of model')
 
-    parser.add_argument('--num_features', type=int, default=64,
+    parser.add_argument('--embedding_dim', type=int, default=64,
                         help='Dimension of embedding vectors')
 
     # mlp
