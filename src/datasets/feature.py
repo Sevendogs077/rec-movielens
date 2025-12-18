@@ -5,6 +5,8 @@ class FeatureDataset(BaseDataset):
     def __init__(self, data_path, max_history_len=50, **kwargs):
         super().__init__(data_path)
 
+        self.feature_dims['history'] = self.num_items + 1 # register 'history'
+
         # ========== Collect labels (rating) ==========
         self.labels = torch.tensor(self.df['rating'].values, dtype=torch.float32)
 

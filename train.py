@@ -64,14 +64,16 @@ def train(args):
 
     # Select model params
     if hasattr(model_class, 'REQUIRED_FEATURES'):
-        target_features = model_class.REQUIRED_FEATURES
+        req_features = model_class.REQUIRED_FEATURES
     else:
-        target_features = list(dataset.feature_dims.keys())
-        # or: target_features = ['user_id', 'item_id', 'age', 'gender']
+        req_features = None
 
-    selected_feature_dims = {
-        k: v for k, v in dataset.feature_dims.items() if k in target_features
-    }
+    if isinstance(req_features, list):
+        selected_feature_dims = {
+            k: v for k, v in dataset.feature_dims.items() if k in req_features
+        }
+    else:
+        selected_feature_dims = dataset.feature_dims.copy()
 
     model_params = {
         'feature_dims': selected_feature_dims,

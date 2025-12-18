@@ -33,10 +33,18 @@ class FactorizationMachine(BaseModel):
 
     def forward(self, inputs):
         feature_ids = [inputs[name] for name in self.feature_names]
-        feature_ids = torch.stack(feature_ids, dim=1)
-        feature_ids = feature_ids + self.offsets # [B, F]
+        embedded_features = []
 
-        emb = self.embedding(feature_ids) # [B, F, D]
+        for feature_id, offset in zip(feature_ids, self.offsets):
+            feature_offset = feature_id + offset
+            emb = self.embedding(feature_offset)
+
+            if emb.ndim == 3:
+                emb = emb.mean(dim=1) # pooling for sequential features
+
+            embedded_features.append(emb.unsqueeze(1)) # [B, 1, D]
+
+        emb = torch.cat(embedded_features, dim=1)
 
         emb_w = emb[:,:,0] # [B, F]
         emb_v = emb[:,:,1:] # [B, F, D]
