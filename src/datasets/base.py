@@ -107,8 +107,10 @@ class BaseDataset(Dataset):
 
         # Manually add other fields
         self.feature_dims['user_id'] = self.num_users
-        self.feature_dims['item_id'] = self.num_items + 1  # Indices: [0, N-1] for items, [N] for cold-start
+        self.feature_dims['item_id'] = self.num_items
         self.feature_dims['last_item_id'] = self.num_items + 1 # Indices: [0, N-1] for items, [N] for cold-start
+
+        # CAUTION: In the future, I'll merge 'item_id' and 'last_item_id' as same feature to share one embedding
 
         # ========== Finalization ==========
 

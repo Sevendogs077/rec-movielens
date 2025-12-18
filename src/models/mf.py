@@ -9,7 +9,7 @@ class MatrixFactorization(BaseModel):
     def __init__(self, feature_dims, embedding_dim, **kwargs):
         super().__init__(feature_dims)
 
-        # Lock feature names with its index
+        # Lock the order of feature names with its index
         self.feature_names = self.REQUIRED_FEATURES
         self.user_idx = self.feature_names.index('user_id')
         self.item_idx = self.feature_names.index('item_id')

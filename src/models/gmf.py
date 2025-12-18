@@ -9,7 +9,7 @@ class GeneralizedMF(BaseModel):
     def __init__(self, feature_dims, embedding_dim, **kwargs):
         super().__init__(feature_dims)
 
-        # Feature names
+        # Features
         self.feature_names = self.REQUIRED_FEATURES
         self.user_idx = self.feature_names.index('user_id')
         self.item_idx = self.feature_names.index('item_id')
