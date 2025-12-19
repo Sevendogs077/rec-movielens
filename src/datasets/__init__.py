@@ -10,8 +10,8 @@ dataset_mapping = {
 
     # Feature
     'fm': FeatureDataset,
-    'deepfm': FeatureDataset,
     'wide_deep': FeatureDataset,
+    'deepfm': FeatureDataset,
 
     # Sequential
     #'din': SequentialDataset,

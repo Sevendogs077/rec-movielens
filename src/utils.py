@@ -20,7 +20,7 @@ def parse_args():
 
     # ============ Model ============
     parser.add_argument('--model_type', type=str, default='fm',
-                        choices=['mf', 'gmf', 'neumf', 'fm', 'deepfm'],
+                        choices=['mf', 'neumf', 'fm', 'widedeep', 'deepfm'],
                         help='type of model')
 
     parser.add_argument('--embedding_dim', type=int, default=64,
