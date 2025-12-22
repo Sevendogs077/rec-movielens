@@ -30,11 +30,12 @@ python evaluate.py
 
 **Step 0: Collaborative Filtering**
 
-> ![MF](https://img.shields.io/badge/MF-Done-success) 
+> ![FunkSVD](https://img.shields.io/badge/FunkSVD-Done-success) 
 > ![NeuMF](https://img.shields.io/badge/NeuMF-Done-success)
 
 **Step 1: Feature Interaction**
 
+> ![LR](https://img.shields.io/badge/LR-Done-success)
 > ![FM](https://img.shields.io/badge/FM-Done-success) 
 > ![Wide&Deep](https://img.shields.io/badge/Wide&Deep-Building-yellow)
 > ![DeepFM](https://img.shields.io/badge/DeepFM-Building-yellow)

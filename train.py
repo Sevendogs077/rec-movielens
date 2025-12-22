@@ -53,8 +53,18 @@ def train(args):
     train_set, test_set = random_split(dataset, [train_size, test_size])
 
     # Create dataloader
-    train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
-    test_loader = DataLoader(test_set, batch_size=args.batch_size, shuffle=False)
+    train_loader = DataLoader(train_set,
+                              batch_size=args.batch_size,
+                              shuffle=True,
+                              num_workers=args.num_workers,
+                              pin_memory=True,
+                              persistent_workers=True)
+    test_loader = DataLoader(test_set,
+                             batch_size=args.batch_size,
+                             shuffle=False,
+                             num_workers=args.num_workers,
+                             pin_memory=True,
+                             persistent_workers=True)
 
     # Select model type
     if args.model_type not in all_models:

@@ -19,8 +19,8 @@ def parse_args():
                         help='max length of user history sequence')
 
     # ============ Model ============
-    parser.add_argument('--model_type', type=str, default='fm',
-                        choices=['mf', 'neumf', 'fm', 'widedeep', 'deepfm'],
+    parser.add_argument('--model_type', type=str, default='lr',
+                        choices=['funksvd', 'neumf', 'lr', 'fm', 'widedeep', 'deepfm'],
                         help='type of model')
 
     parser.add_argument('--embedding_dim', type=int, default=64,
@@ -33,6 +33,7 @@ def parse_args():
     # ============ Train ============
     parser.add_argument('--num_epochs', type=int, default=25)
     parser.add_argument('--batch_size', type=int, default=256)
+    parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--loss_type', type=str, default='mse', choices=['mse', 'l1'])
 
     # ============ Optim & Scheduler ============

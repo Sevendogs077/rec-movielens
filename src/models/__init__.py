@@ -1,14 +1,15 @@
-from sklearn.linear_model import LogisticRegression
 
-from .mf import MatrixFactorization
+from .funksvd import FunkSVD
 from .neumf import NeuMF
+from .lr import LogisticRegression
 from .fm import FactorizationMachine
 from .widedeep import WideDeep
 # from .deepfm import DeepFM
 
 all_models = {
-    'mf': MatrixFactorization,
+    'funksvd': FunkSVD,
     'neumf': NeuMF,
+    'lr': LogisticRegression,
     'fm': FactorizationMachine,
     'wide&deep': WideDeep,
 }

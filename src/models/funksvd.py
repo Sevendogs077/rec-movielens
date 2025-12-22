@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from .base import BaseModel
 
-class MatrixFactorization(BaseModel):
+class FunkSVD(BaseModel):
 
     REQUIRED_FEATURES = ['user_id', 'item_id']
 

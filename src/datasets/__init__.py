@@ -4,11 +4,12 @@ from .feature import FeatureDataset
 
 dataset_mapping = {
     # Interaction
-    'mf': InteractionDataset,
+    'funksvd': InteractionDataset,
     'gmf': InteractionDataset,
     'neumf': InteractionDataset,
 
     # Feature
+    'lr': FeatureDataset,
     'fm': FeatureDataset,
     'wide_deep': FeatureDataset,
     'deepfm': FeatureDataset,
