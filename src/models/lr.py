@@ -4,8 +4,8 @@ from torch import nn
 from .base import BaseModel
 
 class LogisticRegression(BaseModel):
-    # Typically, LR uses Sigmoid for CTR prediction.
-    # In this project, Scaled Sigmoid is used to regress the explicit rating (1-5) directly.
+    """Typically, LR uses Sigmoid for CTR prediction.
+    Here, Scaled Sigmoid is used to regress ratings (1~5)."""
     REQUIRED_FEATURES = '__all__'
     def __init__(self, feature_dims, embedding_dim, **kwargs):
         super().__init__(feature_dims)
@@ -51,7 +51,7 @@ class LogisticRegression(BaseModel):
 
         logits = self.global_bias + torch.sum(emb, dim=1) # [B, 1]
 
-        output = torch.sigmoid(logits) * 4.0 + 1.0
+        output = torch.sigmoid(logits) * 5.0 + 0.5 # [0.5, 5.5]: Large interval for boundary value 1 and 5
 
         output = output.view(-1)
 

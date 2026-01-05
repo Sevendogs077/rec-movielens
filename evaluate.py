@@ -6,9 +6,9 @@ from torch.utils.data import DataLoader
 from torch.utils.data import random_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-from src.dataset import MovieLensDataset
-from src import model
-from src.utils import parse_args, load_args
+from src.datasets import get_dataset
+from src.models import all_models
+from src.utils import parse_args, load_args, get_logger
 
 def set_seed(seed):
     random.seed(seed)
@@ -33,7 +33,7 @@ def evaluate(input_args):
     set_seed(train_args.seed)
 
     # Load dataset
-    dataset = MovieLensDataset(train_args.data_path)
+    dataset = get_dataset(train_args)
 
     # Recreate dataset
     data_size = len(dataset)
@@ -46,17 +46,34 @@ def evaluate(input_args):
     test_loader = DataLoader(test_set, batch_size=train_args.batch_size, shuffle=False)
 
     # Select model
-    model_mapping = {
-        'mf': model.MatrixFactorization,
-        'gmf': model.GeneralizedMF,
-        'ncf': model.NeuralCF,
+    if train_args.model_type not in all_models:
+        raise ValueError(f"Model {train_args.model_type} not found.")
+
+    model_class = all_models[train_args.model_type]
+
+    # Select model params
+    # Select model params
+    if hasattr(model_class, 'REQUIRED_FEATURES'):
+        req_features = model_class.REQUIRED_FEATURES
+    else:
+        req_features = None
+
+    if isinstance(req_features, list):
+        selected_feature_dims = {
+            k: v for k, v in dataset.feature_dims.items() if k in req_features
+        }
+    else:
+        selected_feature_dims = dataset.feature_dims.copy()
+
+    model_params = {
+        'feature_dims': selected_feature_dims,
+        'embedding_dim': train_args.embedding_dim,
+        'mlp_layers': train_args.mlp_layers,
+        'dropout': train_args.dropout
     }
-    if train_args.model_type not in model_mapping:
-        raise ValueError(f"Model '{train_args.model_type}' not found. Choices: {list(model_mapping.keys())}")
-    model_class = model_mapping[train_args.model_type]
 
     # Initialize model architecture
-    net = model_class(dataset.num_users, dataset.num_items, train_args.num_features)
+    net = model_class(**model_params)
     net = net.to(device)
 
     # Load trained model weights
@@ -73,14 +90,14 @@ def evaluate(input_args):
     all_ratings = []
 
     with torch.no_grad():
-        for user_ids, item_ids, ratings in test_loader:
-            user_ids = user_ids.to(device)
-            item_ids = item_ids.to(device)
+        for inputs, labels in test_loader:
+            inputs = {k: v.to(device) for k, v in inputs.items()}
+            labels = labels.to(device)
 
-            output = net(user_ids, item_ids)
+            output = net(inputs)
 
             all_preds.extend(output.cpu().numpy())
-            all_ratings.extend(ratings.numpy())
+            all_ratings.extend(labels.cpu().numpy())
 
     y_pred = np.array(all_preds)
     y_true = np.array(all_ratings)

@@ -7,9 +7,9 @@ __pycache__/
 .vscode/
 *.swp
 
-data/
-*.csv
-*.data
+#data/
+#*.csv
+#*.data
 
 output/
 *.pth
